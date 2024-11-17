@@ -1,0 +1,6 @@
+*.exe
+*.dsym
+main
+
+robot.glb
+pomegranatescan_gltf
