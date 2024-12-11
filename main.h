@@ -30,7 +30,7 @@
 
 #include "raylib.h"
 #include "assert.h"
-#include "libs/vec.h"
+#include "libs/c-vector/vec.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui-4.0/src/raygui.h"
