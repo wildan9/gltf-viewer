@@ -31,7 +31,7 @@
 #include "main.h"
 
 //----------------------------------------------------------------
-Matrix MatrixMultiply(Matrix a, Matrix b)
+static Matrix MatrixMultiply(Matrix a, Matrix b)
 {
     Matrix result = { 0 };
 
@@ -58,7 +58,7 @@ Matrix MatrixMultiply(Matrix a, Matrix b)
     return result;
 }
 
-Matrix MatrixTranslateV(Vector3 v)
+static Matrix MatrixTranslateV(Vector3 v)
 {
     return (Matrix){ 1.0f, 0.0f, 0.0f, v.x,
                       0.0f, 1.0f, 0.0f, v.y,
@@ -66,7 +66,7 @@ Matrix MatrixTranslateV(Vector3 v)
                       0.0f, 0.0f, 0.0f, 1.0f };
 }
 
-Matrix MatrixScaleV(Vector3 v)
+static Matrix MatrixScaleV(Vector3 v)
 {
     return (Matrix){ v.x, 0.0f, 0.0f, 0.0f,
                       0.0f, v.y, 0.0f, 0.0f,
@@ -74,7 +74,7 @@ Matrix MatrixScaleV(Vector3 v)
                       0.0f, 0.0f, 0.0f, 1.0f };
 }
 
-Matrix MatrixRotateXYZ(Vector3 angle)
+static Matrix MatrixRotateXYZ(Vector3 angle)
 {
     Matrix result = { 0 };
 
@@ -108,7 +108,7 @@ Matrix MatrixRotateXYZ(Vector3 angle)
     return result;
 }
 
-Matrix QuaternionToMatrix(Quaternion q) 
+static Matrix QuaternionToMatrix(Quaternion q) 
 {
     Matrix result = { 0 };
 
@@ -157,7 +157,7 @@ Matrix QuaternionToMatrix(Quaternion q)
     return result;
 }
 
-Matrix MatrixRotateV(Vector3 v)
+static Matrix MatrixRotateV(Vector3 v)
 {
     v.x *= DEG2RAD;
     v.y *= DEG2RAD;
@@ -168,9 +168,7 @@ Matrix MatrixRotateV(Vector3 v)
 
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-
-Quaternion QuaternionMultiply(Quaternion a, Quaternion b) 
+static Quaternion QuaternionMultiply(Quaternion a, Quaternion b) 
 {
     Quaternion result = { 0 };
 
@@ -182,7 +180,7 @@ Quaternion QuaternionMultiply(Quaternion a, Quaternion b)
     return result;
 }
 
-Quaternion QuaternionInvert(Quaternion q) 
+static Quaternion QuaternionInvert(Quaternion q) 
 {
     Quaternion result = { 0 };
     
@@ -210,7 +208,7 @@ Quaternion QuaternionInvert(Quaternion q)
     return result;
 }
 
-Quaternion QuaternionFromEuler(Vector3 angle)
+static Quaternion QuaternionFromEuler(Vector3 angle)
 {
     // Calculate half angles
     float halfPitch = angle.x*0.5f;
@@ -236,44 +234,42 @@ Quaternion QuaternionFromEuler(Vector3 angle)
 
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-
-Vector3 Vector3Zero() 
+static Vector3 Vector3Zero() 
 { 
     return (Vector3){ 0.0f, 0.0f, 0.0f }; 
 }
 
-Vector3 Vector3One() 
+static Vector3 Vector3One() 
 { 
     return (Vector3){ 1.0f, 1.0f, 1.0f }; 
 }
 
-Vector3 Vector3Add(Vector3 a, Vector3 b)
+static Vector3 Vector3Add(Vector3 a, Vector3 b)
 {
     return (Vector3){ a.x + b.x, a.y + b.y, a.z + b.z };
 }
 
-Vector3 Vector3Subtract(Vector3 a, Vector3 b)
+static Vector3 Vector3Subtract(Vector3 a, Vector3 b)
 {
     return (Vector3){ a.x - b.x, a.y - b.y, a.z - b.z };
 }
 
-Vector3 Vector3Multiply(Vector3 a, Vector3 b)
+static Vector3 Vector3Multiply(Vector3 a, Vector3 b)
 {
     return (Vector3){ a.x*b.x, a.y*b.y, a.z*b.z };
 }
 
-Vector3 Vector3Scale(Vector3 v, float scalar)
+static Vector3 Vector3Scale(Vector3 v, float scalar)
 {
     return (Vector3){ v.x*scalar, v.y*scalar, v.z*scalar };
 }
 
-float Vector3DotProduct(Vector3 a, Vector3 b)
+static float Vector3DotProduct(Vector3 a, Vector3 b)
 {
     return (float){ a.x*b.x + a.y*b.y + a.z*b.z };
 }
 
-float Vector3Distance(Vector3 a, Vector3 b)
+static float Vector3Distance(Vector3 a, Vector3 b)
 {
     float result = 0.0f;
 
@@ -285,7 +281,7 @@ float Vector3Distance(Vector3 a, Vector3 b)
     return result;
 }
 
-Vector3 Vector3RotateByQuaternion(Vector3 v, Quaternion q)
+static Vector3 Vector3RotateByQuaternion(Vector3 v, Quaternion q)
 {
     // Quaternion-vector multiplication: v' = q * v * q⁻¹
     Quaternion qConjugate = (Quaternion){ -q.x, -q.y, -q.z, q.w };
@@ -314,7 +310,7 @@ Vector3 Vector3RotateByQuaternion(Vector3 v, Quaternion q)
     return (Vector3){ resultQuat.x, resultQuat.y, resultQuat.z };
 }
 
-Vector3 Vector3Transform(Vector3 v, Matrix mat)
+static Vector3 Vector3Transform(Vector3 v, Matrix mat)
 {
     return (Vector3)
     {
@@ -445,8 +441,6 @@ void DrawGizmo(Vector3* modelPos, Vector3* posX, Vector3* posY, Vector3* posZ, f
 
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-
 bool IsMousePressed()
 {
     return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonPressed(MOUSE_RIGHT_BUTTON);
@@ -562,8 +556,6 @@ bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, boo
 
     return true;
 }
-
-//----------------------------------------------------------------
 
 //----------------------------------------------------------------
 
