@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -std=gnu17
+CFLAGS = -Wall -std=gnu2x
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
 SRC = main.c vec.c
 OUT = main
