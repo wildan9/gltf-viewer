@@ -645,8 +645,8 @@ int main()
     bool targetFPSDropdownEditMode = false;
 
     //----------------------------------------------------------------
-    char** animName = (char**)vector_create();
-    char** animNameSlice = (char**)vector_create();
+    char** animName = vector_create();
+    char** animNameSlice = vector_create();
 
     /*.....................................*/
     char* animNameOptions = " ";
@@ -941,7 +941,7 @@ int main()
                     animsCount = 0;
                 }
 
-                animName = (char**)vector_create();
+                animName = vector_create();
                 model = (Model*)MemAlloc(sizeof(Model));
                 *model = LoadModel(fileNameToLoad);
                 modelAnimation = LoadModelAnimations(fileNameToLoad, &animsCount);
@@ -1044,7 +1044,7 @@ int main()
                 animsCount = 0;
             }
 
-            animName = (char**)vector_create();
+            animName = vector_create();
             model = (Model*)MemAlloc(sizeof(Model));
             *model = LoadModel("./robot.glb");
             modelAnimation = LoadModelAnimations("./robot.glb", &animsCount);
