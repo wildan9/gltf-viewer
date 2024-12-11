@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -std=gnu2x
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = main.c vec.c
+SRC = main.c libs/vec.c
 OUT = main
 
 all: $(OUT)

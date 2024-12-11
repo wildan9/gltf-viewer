@@ -30,14 +30,14 @@
 
 #include "raylib.h"
 #include "assert.h"
-#include "vec.h"
+#include "libs/vec.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui-4.0/src/raygui.h"
 
 #undef RAYGUI_IMPLEMENTATION // Avoid including raygui implementation again
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
-#include "gui_window_file_dialog.h"
+#include "libs/gui_window_file_dialog.h"
 
 #define debug true
 
