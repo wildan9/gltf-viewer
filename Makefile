@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -std=gnu2x
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = main.c libs/c-vector/vec.c
-OUT = main
+SRC = gltfview.c libs/c-vector/vec.c
+OUT = gltfview
 
 all: $(OUT)
 

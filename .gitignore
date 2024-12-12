@@ -1,6 +1,7 @@
+.vscode
 *.exe
 *.dsym
-main
+gltfview
 
 robot.glb
 pomegranatescan_gltf
