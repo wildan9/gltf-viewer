@@ -349,9 +349,9 @@ void DrawModelWiresPro(Model model, Vector3 pos, Vector3 rot, Vector3 scl)
     DrawModelWires(model, Vector3Zero(), 1.0f, WHITE);
 }
 
-void DrawTransform(Vector3 pos, Vector3 rot, Vector3 scl)
+void DrawTransform(Vector3 pos, Quaternion rot, Vector3 scl)
 {
-    Matrix rotMatrix = MatrixRotateV(rot);
+    Matrix rotMatrix = QuaternionToMatrix(rot);
 
     float fScl = (scl.x + scl.y + scl.z)/3*0.1f;
   
@@ -374,31 +374,31 @@ void DrawTransform(Vector3 pos, Vector3 rot, Vector3 scl)
     );
 }
 
-void DrawModelBones(Model model, ModelAnimation* anims, unsigned animIndex, unsigned animCurrentFrame, Vector3 pos, Vector3 rot, Vector3 scl, bool isDrawCircles, bool isDrawCubes, bool isDrawAnimTransform, BoneColor colors)
+void DrawModelBones(Model model, ModelAnimation* anims, unsigned animIndex, unsigned animCurrentFrame, Transform transform, bool isDrawCircles, bool isDrawCubes, bool isDrawAnimTransform, BoneColor colors)
 {
-    Matrix rotMatrix = MatrixRotateV(rot);
+    Matrix rotMatrix = QuaternionToMatrix(transform.rotation);
 
     for (unsigned i = 0; i < model.boneCount-1; i++)
     {
         // Get the current bone translation and apply scaling
         Vector3 translation = anims[animIndex].framePoses[animCurrentFrame][i].translation;
-        Vector3 finalTranslation = Vector3Transform(Vector3Multiply(translation, scl), rotMatrix);
-        finalTranslation = Vector3Add(finalTranslation, pos); // Final transformed position
+        Vector3 finalTranslation = Vector3Transform(Vector3Multiply(translation, transform.scale), rotMatrix);
+        finalTranslation = Vector3Add(finalTranslation, transform.translation); // Final transformed position
 
         if (isDrawCubes)
         {
-            DrawCubeV(finalTranslation, Vector3Scale(scl, 0.1f), colors.cubeColor);
+            DrawCubeV(finalTranslation, Vector3Scale(transform.scale, 0.1f), colors.cubeColor);
         }
 
         if (isDrawCircles)
         {
-            float radius = (scl.x + scl.y + scl.z)/3.0f*0.1f;
+            float radius = (transform.scale.x + transform.scale.y + transform.scale.z)/3.0f*0.1f;
             DrawCircle3D(finalTranslation, radius, (Vector3){ 90.0f, 0.0f, 0.0f }, 130.0f, colors.circleColor);
         }
 
         if (isDrawAnimTransform)
         {
-            DrawTransform(finalTranslation, rot, scl);
+            DrawTransform(finalTranslation, transform.rotation, transform.scale);
         }
 
         int parentIndex = anims[animIndex].bones[i].parent;
@@ -406,8 +406,8 @@ void DrawModelBones(Model model, ModelAnimation* anims, unsigned animIndex, unsi
         {
             // Get the parent's translation and apply transformations
             Vector3 parentTranslation = anims[animIndex].framePoses[animCurrentFrame][parentIndex].translation;
-            Vector3 parentFinalTranslation = Vector3Transform(Vector3Multiply(parentTranslation, scl), rotMatrix);
-            parentFinalTranslation = Vector3Add(parentFinalTranslation, pos); // Final transformed position for parent
+            Vector3 parentFinalTranslation = Vector3Transform(Vector3Multiply(parentTranslation, transform.scale), rotMatrix);
+            parentFinalTranslation = Vector3Add(parentFinalTranslation, transform.translation); // Final transformed position for parent
 
             // Draw a line between the bone and its parent
             DrawLine3D(finalTranslation, parentFinalTranslation, colors.baseLineColor);
@@ -617,6 +617,8 @@ int main()
     Vector3 modelRot = Vector3Zero();
     Vector3 modelScl = Vector3One();
 
+    Transform transform = { 0 };
+
     /* Camera */
     
     Camera camera = CreateCamera();
@@ -700,6 +702,13 @@ int main()
     while (!WindowShouldClose())
     {
         /* Update functions */
+
+        //----------------------------------------------------------------
+                            /* Transform */
+        //----------------------------------------------------------------
+        transform.translation = modelPos;
+        transform.rotation    = QuaternionFromEuler(modelRot);
+        transform.scale       = modelScl;
 
         //----------------------------------------------------------------
                             /* Camera */
@@ -1153,9 +1162,7 @@ int main()
                         modelAnimation, 
                         animIndex, 
                         animCurrentFrame, 
-                        modelPos, 
-                        modelRot, 
-                        modelScl,
+                        transform,
                         isAnimDrawCircles,
                         isAnimDrawCubes, 
                         isDrawAnimTransform,
