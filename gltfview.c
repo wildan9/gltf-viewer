@@ -354,27 +354,27 @@ void DrawModelWiresPro(Model model, Transform transform)
     DrawModelWires(model, Vector3Zero(), 1.0f, WHITE);
 }
 
-void DrawTransform(Vector3 pos, Quaternion rot, Vector3 scl)
+void DrawTransform(Transform transform)
 {
-    Matrix rotMatrix = QuaternionToMatrix(rot);
+    Matrix rotMatrix = QuaternionToMatrix(transform.rotation);
 
-    float fScl = (scl.x + scl.y + scl.z)/3*0.1f;
+    float fScl = (transform.scale.x + transform.scale.y + transform.scale.z)/3*0.1f;
   
     DrawLine3D(
-        pos,
-        Vector3Add(pos, (Vector3){ fScl*rotMatrix.m0, fScl*rotMatrix.m1, fScl*rotMatrix.m2 }),
+        transform.translation,
+        Vector3Add(transform.translation, (Vector3){ fScl*rotMatrix.m0, fScl*rotMatrix.m1, fScl*rotMatrix.m2 }),
         RED
     );
         
     DrawLine3D(
-        pos,
-        Vector3Add(pos, (Vector3){ fScl*rotMatrix.m4, fScl*rotMatrix.m5, fScl*rotMatrix.m6 }),
+        transform.translation,
+        Vector3Add(transform.translation, (Vector3){ fScl*rotMatrix.m4, fScl*rotMatrix.m5, fScl*rotMatrix.m6 }),
         GREEN
     );
         
     DrawLine3D(
-        pos,
-        Vector3Add(pos, (Vector3){ fScl*rotMatrix.m8, fScl*rotMatrix.m9, fScl*rotMatrix.m10 }),
+        transform.translation,
+        Vector3Add(transform.translation, (Vector3){ fScl*rotMatrix.m8, fScl*rotMatrix.m9, fScl*rotMatrix.m10 }),
         BLUE
     );
 }
@@ -403,7 +403,7 @@ void DrawModelBones(Model model, ModelAnimation* anims, unsigned animIndex, unsi
 
         if (isDrawAnimTransform)
         {
-            DrawTransform(finalTranslation, transform.rotation, transform.scale);
+            DrawTransform(transform);
         }
 
         int parentIndex = anims[animIndex].bones[i].parent;
@@ -714,7 +714,7 @@ int main()
         modelRot.x *= DEG2RAD;
         modelRot.y *= DEG2RAD;
         modelRot.z *= DEG2RAD;
-        
+
         transform.translation = modelPos;
         transform.rotation    = QuaternionFromEuler(modelRot);
         transform.scale       = modelScl;
