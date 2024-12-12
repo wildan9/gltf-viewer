@@ -320,6 +320,11 @@ static Vector3 Vector3Transform(Vector3 v, Matrix mat)
     };
 }
 
+static Matrix TransformToMatrix(Transform transform)
+{
+    return MatrixMultiply(MatrixMultiply(MatrixTranslateV(transform.translation), QuaternionToMatrix(transform.rotation)), MatrixScaleV(transform.scale));
+}
+
 //----------------------------------------------------------------
 
 Camera CreateCamera()
@@ -337,15 +342,15 @@ Camera CreateCamera()
 
 //----------------------------------------------------------------
 
-void DrawModelPro(Model model, Vector3 pos, Vector3 rot, Vector3 scl)
+void DrawModelPro(Model model, Transform transform)
 {
-    model.transform = MatrixMultiply(MatrixTranslateV(pos), MatrixMultiply(MatrixRotateV(rot), MatrixScaleV(scl)));
+    model.transform = TransformToMatrix(transform);
     DrawModel(model, Vector3Zero(), 1.0f, WHITE);
 }
 
-void DrawModelWiresPro(Model model, Vector3 pos, Vector3 rot, Vector3 scl)
+void DrawModelWiresPro(Model model, Transform transform)
 {
-    model.transform = MatrixMultiply(MatrixTranslateV(pos), MatrixMultiply(MatrixRotateV(rot), MatrixScaleV(scl)));
+    model.transform = TransformToMatrix(transform);
     DrawModelWires(model, Vector3Zero(), 1.0f, WHITE);
 }
 
@@ -706,6 +711,10 @@ int main()
         //----------------------------------------------------------------
                             /* Transform */
         //----------------------------------------------------------------
+        modelRot.x *= DEG2RAD;
+        modelRot.y *= DEG2RAD;
+        modelRot.z *= DEG2RAD;
+        
         transform.translation = modelPos;
         transform.rotation    = QuaternionFromEuler(modelRot);
         transform.scale       = modelScl;
@@ -1152,7 +1161,7 @@ int main()
             {
                 if (isAnimDrawMainWires)
                 {
-                    DrawModelWiresPro(*model, modelPos, modelRot, modelScl);
+                    DrawModelWiresPro(*model, transform);
                 }
 
                 if (animsCount > 0)
@@ -1172,7 +1181,7 @@ int main()
             }
             else
             {
-                DrawModelPro(*model, modelPos, modelRot, modelScl);
+                DrawModelPro(*model, transform);
             }
         }
 
