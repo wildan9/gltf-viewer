@@ -412,7 +412,11 @@ void DrawModelBones(Model model, ModelAnimation* anims, unsigned animIndex, unsi
 
         if (isDrawAnimTransform)
         {
-            DrawTransform(transform);
+            Transform t = { 0 };
+            t.translation = finalTranslation;
+            t.rotation = transform.rotation;
+            t.scale = transform.scale;
+            DrawTransform(t);
         }
 
         int parentIndex = anims[animIndex].bones[i].parent;
