@@ -325,6 +325,15 @@ static Matrix TransformToMatrix(Transform transform)
     return MatrixMultiply(MatrixMultiply(MatrixTranslateV(transform.translation), QuaternionToMatrix(transform.rotation)), MatrixScaleV(transform.scale));
 }
 
+static Vector3 Vector3Rotation(Vector3 rotation)
+{
+    rotation.x *= DEG2RAD;
+    rotation.y *= DEG2RAD;
+    rotation.z *= DEG2RAD;
+
+    return rotation;
+}
+
 //----------------------------------------------------------------
 
 Camera CreateCamera()
@@ -711,12 +720,9 @@ int main()
         //----------------------------------------------------------------
                             /* Transform */
         //----------------------------------------------------------------
-        modelRot.x *= DEG2RAD;
-        modelRot.y *= DEG2RAD;
-        modelRot.z *= DEG2RAD;
 
         transform.translation = modelPos;
-        transform.rotation    = QuaternionFromEuler(modelRot);
+        transform.rotation    = QuaternionFromEuler(Vector3Rotation(modelRot));
         transform.scale       = modelScl;
 
         //----------------------------------------------------------------
