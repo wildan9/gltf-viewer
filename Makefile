@@ -1,6 +1,16 @@
 CC = gcc
-CFLAGS = -Wall -std=gnu2x
+CFLAGS = -Wall -std=gnu23
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
+
+# Default to release mode
+DEBUG = false
+
+ifeq ($(DEBUG), true)
+    CFLAGS += -g -DDEBUG
+else
+    CFLAGS += -O2
+endif
+
 SRC = gltfview.c libs/c-vector/vec.c
 OUT = gltfview
 

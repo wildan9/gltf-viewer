@@ -9,7 +9,7 @@
 *
 ********************************************************************************************
 * 
-*   Copyright (c) 2024 Wildan R Wijanarko
+*   Copyright (c) 2024-2025 Wildan R Wijanarko
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -33,13 +33,11 @@
 #include "libs/c-vector/vec.h"
 
 #define RAYGUI_IMPLEMENTATION
-#include "raygui-4.0/src/raygui.h"
+#include "raygui/src/raygui.h"
 
 #undef RAYGUI_IMPLEMENTATION // Avoid including raygui implementation again
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "libs/gui_window_file_dialog.h"
-
-#define debug true
 
 const int screenWidth = 1080;
 const int screenHeight = 720;

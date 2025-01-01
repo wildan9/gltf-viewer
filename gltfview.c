@@ -9,7 +9,7 @@
 *
 ********************************************************************************************
 * 
-*   Copyright (c) 2024 Wildan R Wijanarko
+*   Copyright (c) 2024-2025 Wildan R Wijanarko
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -579,7 +579,7 @@ bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, boo
 
 void LoadRobot(bool* flag)
 {
-#if debug
+#if DEBUG
     if (IsKeyPressed(KEY_K)) *flag = true;
 #endif
 }
@@ -1316,7 +1316,7 @@ int main()
                 Rectangle optionRect = { uiSettingsLeft + 40, 380 + 20*(i + 1), 100, 20 };
 
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                    CheckCollisionPointRec(GetMousePosition(), optionRect))
+                    CheckCollisionPointRec(mousePosition, optionRect))
                 {
                     // Set active option based on which one was clicked
                     maxSclActiveOption = i;
@@ -1329,7 +1329,7 @@ int main()
         {
             // Toggle dropdown edit mode when clicking the top rectangle (collapsed dropdown)
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                CheckCollisionPointRec(GetMousePosition(), (Rectangle){ uiSettingsLeft + 40, 380, 100, 20 }))
+                CheckCollisionPointRec(mousePosition, (Rectangle){ uiSettingsLeft + 40, 380, 100, 20 }))
             {
                 maxSclDropdownEditMode = !maxSclDropdownEditMode;  // Open dropdown
             }
@@ -1357,7 +1357,7 @@ int main()
                     targetFPS = (i == 0) ? 30 : (i == 1) ? 60 : 120;
 
                     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                        CheckCollisionPointRec(GetMousePosition(), optionRect))
+                        CheckCollisionPointRec(mousePosition, optionRect))
                     {
                         // Set active option based on which one was clicked
                         targetFPSActiveOption = i;
@@ -1371,7 +1371,7 @@ int main()
             {
                 // Toggle dropdown edit mode when clicking the top rectangle (collapsed dropdown)
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                    CheckCollisionPointRec(GetMousePosition(), (Rectangle){ uiSettingsLeft + 40, 430, 100, 20 }))
+                    CheckCollisionPointRec(mousePosition, (Rectangle){ uiSettingsLeft + 40, 430, 100, 20 }))
                 {
                     targetFPSDropdownEditMode = !targetFPSDropdownEditMode;  // Open dropdown
                 }
@@ -1406,7 +1406,7 @@ int main()
                         Rectangle optionRect = { uiSettingsLeft + 40, 480 + 20*(i + 1), 100, 20 };
 
                         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                            CheckCollisionPointRec(GetMousePosition(), optionRect))
+                            CheckCollisionPointRec(mousePosition, optionRect))
                         {
                             // Set active option based on which one was clicked
                             animNameActiveOption = i;
@@ -1420,7 +1420,7 @@ int main()
                 {
                     // Toggle dropdown edit mode when clicking the top rectangle (collapsed dropdown)
                     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                        CheckCollisionPointRec(GetMousePosition(), (Rectangle){ uiSettingsLeft + 40, 480, 100, 20 }))
+                        CheckCollisionPointRec(mousePosition, (Rectangle){ uiSettingsLeft + 40, 480, 100, 20 }))
                     {
                         animNameDropdownEditMode = !animNameDropdownEditMode;  // Open dropdown
                     }
@@ -1468,7 +1468,7 @@ int main()
 
                     // Toggle dropdown edit mode when clicking the top rectangle (collapsed dropdown)
                     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-                        CheckCollisionPointRec(GetMousePosition(), (Rectangle){ uiSettingsLeft + 40, 480, 100, 20 }))
+                        CheckCollisionPointRec(mousePosition, (Rectangle){ uiSettingsLeft + 40, 480, 100, 20 }))
                     {
                         animNameDropdownEditMode = !animNameDropdownEditMode;  // Open dropdown
                     }
