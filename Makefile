@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall -std=gnu23
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
 
-# Default to release mode
-DEBUG = false
+# Default to debug mode
+DEBUG = true
 
 ifeq ($(DEBUG), true)
     CFLAGS += -g -DDEBUG
