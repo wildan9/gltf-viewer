@@ -1544,12 +1544,12 @@ int main()
                 {
                     isUpdateBoneCircleColor = !isUpdateBoneCircleColor;
                 }
-                if (GuiButton((Rectangle){ bonesColorUpdateLeft + 77, 165, 40, 17 }, "Update")
+                else if (GuiButton((Rectangle){ bonesColorUpdateLeft + 77, 165, 40, 17 }, "Update")
                     && !isColorOnUpdate)
                 {
                     isUpdateBoneCubeColor = !isUpdateBoneCubeColor;
                 }
-                if (GuiButton((Rectangle){ bonesColorUpdateLeft + 77, 205, 40, 17 }, "Update")
+                else if (GuiButton((Rectangle){ bonesColorUpdateLeft + 77, 205, 40, 17 }, "Update")
                     && !isColorOnUpdate)
                 {
                     isUpdateBoneBaseLineColor = !isUpdateBoneBaseLineColor;
@@ -1565,8 +1565,7 @@ int main()
                     isUpdateBoneCircleColor = !isUpdateBoneCircleColor;
                 }
             }
-
-            if (!isUpdateBoneCircleColor && isUpdateBoneCubeColor && !isUpdateBoneBaseLineColor)
+            else if (!isUpdateBoneCircleColor && isUpdateBoneCubeColor && !isUpdateBoneBaseLineColor)
             {
                 GuiColorPicker((Rectangle){ 280, 100, 140, 140 }, " ", &animBoneColor.cubeColor);
 
@@ -1575,8 +1574,7 @@ int main()
                     isUpdateBoneCubeColor = !isUpdateBoneCubeColor;
                 }
             }
-
-            if (!isUpdateBoneCircleColor && !isUpdateBoneCubeColor && isUpdateBoneBaseLineColor)
+            else if (!isUpdateBoneCircleColor && !isUpdateBoneCubeColor && isUpdateBoneBaseLineColor)
             {
                 GuiColorPicker((Rectangle){ 280, 100, 140, 140 }, " ", &animBoneColor.baseLineColor);
 
