@@ -757,9 +757,6 @@ int main()
 
         isGizmoMod = false;
 
-        float currentX = GetMouseX();
-        float currentY = GetMouseY();
-
         // Get the current mouse position
         Ray ray = GetMouseRay(mousePos, camera);
 
@@ -789,13 +786,13 @@ int main()
             if (modelPos.z < camera.position.z)
             {
                 // Move the gizmo based on mouse movement
-                if (currentX < lastX) 
+                if (mousePos.x < lastX) 
                 {
                     gizmoX.x -= 0.1f;
                     gizmoY.x -= 0.1f;
                     gizmoZ.x -= 0.1f;
                 } 
-                else if (currentX > lastX) 
+                else if (mousePos.x > lastX) 
                 {
                     gizmoX.x += 0.1f;
                     gizmoY.x += 0.1f;
@@ -805,13 +802,13 @@ int main()
             else
             {
                 // Move the gizmo based on mouse movement
-                if (currentX < lastX) 
+                if (mousePos.x < lastX) 
                 {
                     gizmoX.x += 0.1f;
                     gizmoY.x += 0.1f;
                     gizmoZ.x += 0.1f;
                 } 
-                else if (currentX > lastX) 
+                else if (mousePos.x > lastX) 
                 {
                     gizmoX.x -= 0.1f;
                     gizmoY.x -= 0.1f;
@@ -844,13 +841,13 @@ int main()
             gizmoXYZColors[1] = true;
         
             // Move the gizmo based on mouse movement
-            if (currentY < lastY) 
+            if (mousePos.y < lastY) 
             {
                 gizmoX.y += 0.1f;
                 gizmoY.y += 0.1f;
                 gizmoZ.y += 0.1f;
             } 
-            else if (currentY > lastY) 
+            else if (mousePos.y > lastY) 
             {
                 gizmoX.y -= 0.1f;
                 gizmoY.y -= 0.1f;
@@ -884,25 +881,25 @@ int main()
             if (modelPos.x < camera.position.x)
             {
                 // Move the gizmo based on mouse movement
-                if (currentX < lastX) 
+                if (mousePos.x < lastX) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 } 
-                else if (currentX > lastX) 
+                else if (mousePos.x > lastX) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 }
-                else if (currentY < lastY) 
+                else if (mousePos.y < lastY) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 } 
-                else if (currentY > lastY) 
+                else if (mousePos.y > lastY) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
@@ -912,25 +909,25 @@ int main()
             else
             {
                 // Move the gizmo based on mouse movement
-                if (currentX < lastX) 
+                if (mousePos.x < lastX) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 } 
-                else if (currentX > lastX) 
+                else if (mousePos.x > lastX) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 }
-                else if (currentY < lastY) 
+                else if (mousePos.y < lastY) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 } 
-                else if (currentY > lastY) 
+                else if (mousePos.y > lastY) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
@@ -939,8 +936,8 @@ int main()
             }
         }
 
-        lastX = currentX; // Update lastX to current position
-        lastY = currentY; // Update lastY to current position
+        lastX = mousePos.x; // Update lastX to current position
+        lastY = mousePos.y; // Update lastY to current position
 
         //----------------------------------------------------------------
                             /* Load model button */
