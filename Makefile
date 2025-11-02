@@ -1,26 +1,38 @@
+# Compiler
 CC = gcc
-CFLAGS = -Wall -std=gnu23
-LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
+
+# Compiler flags
+CFLAGS = -Wall -Wextra -std=c23 -I"C:/raylib64/include"
+
+# Linker flags
+LDFLAGS = -L"C:/raylib64/lib" -lraylib -lopengl32 -lgdi32 -lwinmm
+
+# Executable name
+TARGET = gltfview.exe
+
+# Source files
+SRCS = gltfview.c libs/c-vector/vec.c
 
 # Default to debug mode
 DEBUG = true
 
 ifeq ($(DEBUG), true)
-    CFLAGS += -g -DDEBUG
+	CFLAGS += -g -DDEBUG
 else
-    CFLAGS += -O2
+	CFLAGS += -O2
 endif
 
-SRC = gltfview.c libs/c-vector/vec.c
-OUT = gltfview
+# Default target (build)
+all: $(TARGET)
 
-all: $(OUT)
+# Build rule
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) $(LDFLAGS)
 
-$(OUT): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(OUT) $(LIBS)
+# Run rule
+run: $(TARGET)
+	./$(TARGET)
 
-run: $(OUT)
-	./$(OUT)
-
+# Clean rule
 clean:
-	rm -f $(OUT)
+	del $(TARGET)
