@@ -700,9 +700,6 @@ int main()
     bool isAnimColorUpdate = false;
 
     //----------------------------------------------------------------
-    float lastX = GetMouseX();
-    float lastY = GetMouseY();
-
     Vector3 gizmoX = { 0.0f + 4.0f, 0.0f, 0.0f };
     Vector3 gizmoY = { 0.0f, 0.0f + 4.0f, 0.0f };
     Vector3 gizmoZ = { 0.0f, 0.0f, 0.0f + 4.0f };
@@ -719,6 +716,7 @@ int main()
     
     //--------------------------------------------------------------------
     Vector2 mousePos;
+    Vector2 mouseDelta;
 
     while (!WindowShouldClose())
     {
@@ -786,13 +784,13 @@ int main()
             if (modelPos.z < camera.position.z)
             {
                 // Move the gizmo based on mouse movement
-                if (mousePos.x < lastX) 
+                if (mousePos.x < mouseDelta.x) 
                 {
                     gizmoX.x -= 0.1f;
                     gizmoY.x -= 0.1f;
                     gizmoZ.x -= 0.1f;
                 } 
-                else if (mousePos.x > lastX) 
+                else if (mousePos.x > mouseDelta.x) 
                 {
                     gizmoX.x += 0.1f;
                     gizmoY.x += 0.1f;
@@ -802,13 +800,13 @@ int main()
             else
             {
                 // Move the gizmo based on mouse movement
-                if (mousePos.x < lastX) 
+                if (mousePos.x < mouseDelta.x) 
                 {
                     gizmoX.x += 0.1f;
                     gizmoY.x += 0.1f;
                     gizmoZ.x += 0.1f;
                 } 
-                else if (mousePos.x > lastX) 
+                else if (mousePos.x > mouseDelta.x) 
                 {
                     gizmoX.x -= 0.1f;
                     gizmoY.x -= 0.1f;
@@ -841,13 +839,13 @@ int main()
             gizmoXYZColors[1] = true;
         
             // Move the gizmo based on mouse movement
-            if (mousePos.y < lastY) 
+            if (mousePos.y < mouseDelta.y) 
             {
                 gizmoX.y += 0.1f;
                 gizmoY.y += 0.1f;
                 gizmoZ.y += 0.1f;
             } 
-            else if (mousePos.y > lastY) 
+            else if (mousePos.y > mouseDelta.y) 
             {
                 gizmoX.y -= 0.1f;
                 gizmoY.y -= 0.1f;
@@ -881,25 +879,25 @@ int main()
             if (modelPos.x < camera.position.x)
             {
                 // Move the gizmo based on mouse movement
-                if (mousePos.x < lastX) 
+                if (mousePos.x < mouseDelta.x) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 } 
-                else if (mousePos.x > lastX) 
+                else if (mousePos.x > mouseDelta.x) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 }
-                else if (mousePos.y < lastY) 
+                else if (mousePos.y < mouseDelta.y) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 } 
-                else if (mousePos.y > lastY) 
+                else if (mousePos.y > mouseDelta.y) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
@@ -909,25 +907,25 @@ int main()
             else
             {
                 // Move the gizmo based on mouse movement
-                if (mousePos.x < lastX) 
+                if (mousePos.x < mouseDelta.x) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
                     gizmoZ.z -= 0.1f;
                 } 
-                else if (mousePos.x > lastX) 
+                else if (mousePos.x > mouseDelta.x) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 }
-                else if (mousePos.y < lastY) 
+                else if (mousePos.y < mouseDelta.y) 
                 {
                     gizmoX.z += 0.1f;
                     gizmoY.z += 0.1f;
                     gizmoZ.z += 0.1f;
                 } 
-                else if (mousePos.y > lastY) 
+                else if (mousePos.y > mouseDelta.y) 
                 {
                     gizmoX.z -= 0.1f;
                     gizmoY.z -= 0.1f;
@@ -936,8 +934,8 @@ int main()
             }
         }
 
-        lastX = mousePos.x; // Update lastX to current position
-        lastY = mousePos.y; // Update lastY to current position
+        mouseDelta.x = mousePos.x; // Update mouseDelta.x to current position
+        mouseDelta.y = mousePos.y; // Update mouseDelta.y to current position
 
         //----------------------------------------------------------------
                             /* Load model button */
