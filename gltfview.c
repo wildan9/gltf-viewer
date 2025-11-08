@@ -464,113 +464,111 @@ bool IsMousePressed()
     return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonPressed(MOUSE_RIGHT_BUTTON);
 }
 
-bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, bool* isDragging, unsigned* index, ScrollbarColor* color)
+bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, bool* isDragging, unsigned* index, ScrollbarColor* color, int maxVisibleItems)
 {
-    const unsigned max = vector_size(v);
+    const unsigned size = vector_size(v);
+
+    if (size < 1) return false;
 
     // Adjust start and end based on scroll input (mouse wheel)
-    if (GetMouseWheelMove() < 0.0f && *end < max)
+    if (GetMouseWheelMove() < 0.0f && *end < size)
     {
         *start += 1;
         *end += 1;
     }
-    if (GetMouseWheelMove() > 0.0f && *start > 0)
+    else if (GetMouseWheelMove() > 0.0f && *start > 0)
     {
         *start -= 1;
         *end -= 1;
     }
 
-    Rectangle editModeRec = { rec.x, rec.y + rec.height, rec.width + 11, rec.height*5 };
+    Rectangle editModeRec = { rec.x, rec.y + rec.height, rec.width + 11, rec.height*maxVisibleItems };
+    
+    // Scrollbar background
+    Rectangle scrollbarRec = { rec.x + rec.width + 1, rec.y + rec.height, 10, rec.height*maxVisibleItems };
+    DrawRectangleRec(scrollbarRec, color->backgroundColor);
 
-    // Draw scrollbar if the number of items exceeds the visible range
-    if (max > 5)
+    // Calculate the height and position of the scroll thumb
+    float thumbHeight = ((float)maxVisibleItems/size)*scrollbarRec.height;
+    float thumbY = scrollbarRec.y + (*start/(float)(size - maxVisibleItems))*(scrollbarRec.height - thumbHeight);
+
+    Vector2 mousePos = GetMousePosition();
+
+    Rectangle thumbRec = { scrollbarRec.x, thumbY, scrollbarRec.width, thumbHeight };
+    bool isHovering = CheckCollisionPointRec(mousePos, thumbRec);
+
+    if (isHovering && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
     {
-        // Scrollbar background
-        Rectangle scrollbarRec = { rec.x + rec.width + 1, rec.y + rec.height, 10, rec.height*5 };
-        DrawRectangleRec(scrollbarRec, color->backgroundColor);
+        color->isDragging = true;
+    }
+    else if (color->isDragging && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) 
+    {
+        color->isDragging = false;
+    }
 
-        // Calculate the height and position of the scroll thumb
-        float thumbHeight = (5.0f/max)*scrollbarRec.height;
-        float thumbY = scrollbarRec.y + (*start/(float)(max - 5))*(scrollbarRec.height - thumbHeight);
+    if (isHovering && color->isDragging) 
+    {
+        color->currentThumbColor = color->draggedColor;
+    }
+    else if (isHovering) 
+    {
+        color->currentThumbColor = color->hoverColor;
+    }
+    else if (!isHovering && !color->isDragging)
+    {
+        color->currentThumbColor = color->idleColor;
+    }
+    
+    DrawRectangleRec(thumbRec, color->currentThumbColor);
 
-        Vector2 mousePos = GetMousePosition();
+    float thumbOffsetY = 0.0f;
 
-        Rectangle thumbRec = { scrollbarRec.x, thumbY, scrollbarRec.width, thumbHeight };
-        bool isHovering = CheckCollisionPointRec(mousePos, thumbRec);
+    // Start dragging if mouse button is pressed within the thumb
+    if (CheckCollisionPointRec(mousePos, thumbRec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        *isDragging = true;
+        thumbOffsetY = mousePos.y - thumbRec.y; // Calculate offset
+    }
 
-        if (isHovering && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
+    // Update thumb position while dragging
+    if (*isDragging)
+    {
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
         {
-            color->isDragging = true;
-        }
-        else if (color->isDragging && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) 
-        {
-            color->isDragging = false;
-        }
-
-        if (isHovering && color->isDragging) 
-        {
-            color->currentThumbColor = color->draggedColor;
-        }
-        else if (isHovering) 
-        {
-            color->currentThumbColor = color->hoverColor;
-        }
-        else if (!isHovering && !color->isDragging)
-        {
-            color->currentThumbColor = color->idleColor;
+            *isDragging = false;
         }
         
-        DrawRectangleRec(thumbRec, color->currentThumbColor);
+        float newThumbY = mousePos.y - thumbOffsetY;
 
-        float thumbOffsetY = 0.0f;
+        // Clamp the thumb's position within the scrollbar
+        newThumbY = fmax(scrollbarRec.y, fmin(newThumbY, scrollbarRec.y + scrollbarRec.height - thumbHeight));
 
-        // Start dragging if mouse button is pressed within the thumb
-        if (CheckCollisionPointRec(mousePos, thumbRec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        {
-            *isDragging = true;
-            thumbOffsetY = mousePos.y - thumbRec.y; // Calculate offset
-        }
-
-        // Update thumb position while dragging
-        if (*isDragging)
-        {
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
-            {
-                *isDragging = false;
-            }
-            
-            float newThumbY = mousePos.y - thumbOffsetY;
-
-            // Clamp the thumb's position within the scrollbar
-            newThumbY = fmax(scrollbarRec.y, fmin(newThumbY, scrollbarRec.y + scrollbarRec.height - thumbHeight));
-
-            // Update the scroll start based on the new thumb position
-            float scrollRatio = (newThumbY - scrollbarRec.y)/(scrollbarRec.height - thumbHeight);
-            *start = round(scrollRatio*(max - 5));
-            *end = *start + 5;
-        }
-
-        // Draw dropdown items
-        for (unsigned i = 0, j = *start; i < max && j < *end; i++, j++)
-        {
-            Rectangle itemRec = { rec.x, rec.y + rec.height*i + rec.height, rec.width, rec.height };
-
-            if (GuiButton(itemRec, v[j]))
-            {
-                *index = j;
-
-                return false;
-            }
-
-            if (IsMousePressed() && !CheckCollisionPointRec(mousePos, editModeRec))
-            {
-                return false;
-            }
-        }
-
-        // Debug rec
-        //DrawRectangleRec(editModeRec, RED);
+        // Update the scroll start based on the new thumb position
+        float scrollRatio = (newThumbY - scrollbarRec.y)/(scrollbarRec.height - thumbHeight);
+        *start = round(scrollRatio*(size - maxVisibleItems));
+        *end = *start + maxVisibleItems;
     }
+
+    // Draw dropdown items
+    for (unsigned i = 0, j = *start; i < size && j < *end; i++, j++)
+    {
+        Rectangle itemRec = { rec.x, rec.y + rec.height*i + rec.height, rec.width, rec.height };
+
+        if (GuiButton(itemRec, v[j]))
+        {
+            *index = j;
+
+            return false;
+        }
+
+        if (IsMousePressed() && !CheckCollisionPointRec(mousePos, editModeRec))
+        {
+            return false;
+        }
+    }
+
+    // Debug rec
+    //DrawRectangleRec(editModeRec, RED);
 
     return true;
 }
@@ -705,16 +703,13 @@ int main()
     Vector3 gizmoZ = { 0.0f, 0.0f, 0.0f + 4.0f };
 
     float gizmoRad = 0.5f;
-
     bool isGizmoMod = false;
-
-    bool gizmoXYZColors[3] = { false, false, false };
-
     bool isDrawWires = false;
-
     bool loadFromKey = false;
+    bool gizmoXYZColors[3] = { false, false, false };
     
     //--------------------------------------------------------------------
+    Ray ray;
     Vector2 mousePos;
     Vector2 mouseDelta;
 
@@ -723,6 +718,7 @@ int main()
         /* Update functions */
         
         mousePos = GetMousePosition();
+        ray = GetMouseRay(mousePos, camera);
 
         //----------------------------------------------------------------
                             /* Transform */
@@ -754,9 +750,6 @@ int main()
         }
 
         isGizmoMod = false;
-
-        // Get the current mouse position
-        Ray ray = GetMouseRay(mousePos, camera);
 
         /*
         * Gizmo point x
@@ -1437,7 +1430,8 @@ int main()
                         &animDropdownEnd, 
                         &animDropdownIsDragging,
                         &animIndex,
-                        &animScrollbarColor 
+                        &animScrollbarColor,
+                        5 
                     );
 
                     // If mouse is pressed and not in drag mode, set edit mode to false
