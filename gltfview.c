@@ -464,7 +464,7 @@ bool IsMousePressed()
     return IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsMouseButtonPressed(MOUSE_RIGHT_BUTTON);
 }
 
-bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, bool* isDragging, unsigned* index, ScrollbarColor* color, int maxVisibleItems)
+bool GuiDropdownPro(Rectangle rec, char** v, unsigned* start, unsigned* end, bool* isDragging, unsigned* index, ScrollbarColor* color, unsigned maxVisibleItems)
 {
     const unsigned size = vector_size(v);
 
@@ -672,8 +672,9 @@ int main()
     bool animNameDropdownEditMode = false;
 
     /*.....................................*/
+    unsigned animDropdownMaxVisibleItems = 7;
     unsigned animDropdownStart = 0;
-    unsigned animDropdownEnd = 5;
+    unsigned animDropdownEnd = animDropdownMaxVisibleItems;
     bool animDropdownIsDragging = false;
 
     bool isPlayAnimation = true;
@@ -1431,7 +1432,7 @@ int main()
                         &animDropdownIsDragging,
                         &animIndex,
                         &animScrollbarColor,
-                        5 
+                        animDropdownMaxVisibleItems 
                     );
 
                     // If mouse is pressed and not in drag mode, set edit mode to false
